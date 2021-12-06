@@ -1,105 +1,28 @@
 ---
-name: "\U0001F41B Bug Report"
-about: Submit a bug report to help us improve transformers
-title: ''
-labels: ''
-assignees: ''
-
+name: Bug report
+about: 버그 관련 리포팅을 합니다.
+title: "[BUG] "
+labels: bug
+assignees: ""
 ---
 
+## 🐛 Bug
+<!-- 어떠한 버그인지 명확하고 간단하게 설명 부탁드립니다.-->
 
-## Environment info
-<!-- You can run the command `transformers-cli env` and copy-and-paste its output below.
-     Don't forget to fill out the missing fields in that output! -->
+## To Reproduce
+<!-- 만약에 코드 샘플, 에러 메세지, 스택 트레이스 등이 있다면 이를 첨부해주세요-->
 
-- `transformers` version:
-- Platform:
-- Python version:
-- PyTorch version (GPU?):
-- Tensorflow version (GPU?):
-- Using GPU in script?:
-- Using distributed or parallel set-up in script?:
+버그를 재현하기 위한 재현절차를 작성해주세요.
 
-### Who can help
-<!-- Your issue will be replied to more quickly if you can figure out the right person to tag with @
- If you know how to use git blame, that is the easiest way, otherwise, here is a rough guide of **who to tag**.
- Please tag fewer than 3 people.
-
-Models:
-
-- ALBERT, BERT, XLM, DeBERTa, DeBERTa-v2, ELECTRA, MobileBert, SqueezeBert: @LysandreJik
-- encoder-decoder models (For example, BlenderBot, BART, Marian, Pegasus, T5, ByT5): @patrickvonplaten, @patil-suraj
-- Longformer, Reformer, TransfoXL, XLNet, FNet: @patrickvonplaten
-- FSMT: @stas00
-- Funnel: @sgugger
-- GPT-2, GPT: @patrickvonplaten, @LysandreJik
-- RAG, DPR: @patrickvonplaten, @lhoestq
-- TensorFlow: @Rocketknight1
-- JAX/Flax: @patil-suraj @patrickvonplaten 
-- TAPAS, LayoutLM, LayoutLMv2, LUKE, ViT, BEiT, DEiT, DETR, CANINE: @NielsRogge
-- GPT-Neo, GPT-J, CLIP: @patil-suraj
-- Wav2Vec2, HuBERT, SpeechEncoderDecoder: @patrickvonplaten, @anton-l
-
-If the model isn't in the list, ping @LysandreJik who will redirect you to the correct contributor.
-
-Library:
-
-- Benchmarks: @patrickvonplaten
-- Deepspeed: @stas00
-- Ray/raytune: @richardliaw, @amogkam
-- Text generation: @patrickvonplaten
-- Tokenizers: @LysandreJik
-- Trainer: @sgugger
-- Pipelines: @Narsil
-- Speech: @patrickvonplaten, @anton-l
-- Vision: @NielsRogge, @sgugger
-
-Documentation: @sgugger
-
-Model hub:
-
-- for issues with a model, report at https://discuss.huggingface.co/ and tag the model's creator.
-
-HF projects:
-
-- datasets: [different repo](https://github.com/huggingface/datasets)
-- rust tokenizers: [different repo](https://github.com/huggingface/tokenizers)
-
-Examples:
-
-- maintained examples (not research project or legacy): @sgugger, @patil-suraj
-
-For research projetcs, please ping the contributor directly. For example, on the following projects:
-
-- research_projects/bert-loses-patience: @JetRunner
-- research_projects/distillation: @VictorSanh
-
- -->
-
-## Information
-
-Model I am using (Bert, XLNet ...):
-
-The problem arises when using:
-* [ ] the official example scripts: (give details below)
-* [ ] my own modified scripts: (give details below)
-
-The tasks I am working on is:
-* [ ] an official GLUE/SQUaD task: (give the name)
-* [ ] my own task or dataset: (give details below)
-
-## To reproduce
-
-Steps to reproduce the behavior:
-
-1.
-2.
-3.
-
-<!-- If you have code snippets, error messages, stack traces please provide them here as well.
-     Important! Use code tags to correctly format your code. See https://help.github.com/en/github/writing-on-github/creating-and-highlighting-code-blocks#syntax-highlighting
-     Do not use screenshots, as they are hard to read and (more importantly) don't allow others to copy-and-paste your code.-->
+1. -
+2. -
+3. -
 
 ## Expected behavior
+<!-- 버그가 발견되기 이전에 코드를 실행했을 경우에 어떤 결과를 예상했는지 작성해주세요.-->
 
-<!-- A clear and concise description of what you would expect to happen. -->
+## Environment
+<!-- 실행한 환경을 서술해주세요.-->
+
+## Additional context
+<!-- 추가적인 정보가 있다면 서술해주세요.-->

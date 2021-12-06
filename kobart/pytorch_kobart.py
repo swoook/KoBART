@@ -25,29 +25,40 @@ import os
 import shutil
 from zipfile import ZipFile
 
-from .utils import download as _download
+from kobart.utils import download as _download
 
 pytorch_kobart = {
-    'url':
-    'https://kobert.blob.core.windows.net/models/kobart/kobart_base_cased_ff4bda5738.zip',
-    'fname': 'kobart_base_cased_ff4bda5738.zip',
-    'chksum': 'ff4bda5738'
+    "url": "https://kobert.blob.core.windows.net/models/kobart/kobart_base_cased_ff4bda5738.zip",
+    "fname": "kobart_base_cased_ff4bda5738.zip",
+    "chksum": "ff4bda5738",
 }
 
 
-def get_pytorch_kobart_model(ctx='cpu', cachedir='~/kobart/'):
+def get_pytorch_kobart_model(ctx="cpu", cachedir=".cache"):
     # download model
     global pytorch_kobart
     model_info = pytorch_kobart
-    model_zip, is_cached = _download(model_info['url'],
-                                     model_info['fname'],
-                                     model_info['chksum'],
-                                     cachedir=cachedir)
+    model_zip, is_cached = _download(
+        model_info["url"], model_info["fname"], model_info["chksum"], cachedir=cachedir
+    )
     cachedir_full = os.path.expanduser(cachedir)
-    model_path = os.path.join(cachedir_full, 'kobart_from_pretrained')
+    model_path = os.path.join(cachedir_full, "kobart_from_pretrained")
     if not os.path.exists(model_path) or not is_cached:
         if not is_cached:
             shutil.rmtree(model_path, ignore_errors=True)
         zipf = ZipFile(os.path.expanduser(model_zip))
         zipf.extractall(path=cachedir_full)
     return model_path
+
+
+if __name__ == "__main__":
+    # pip install git+https://github.com/SKT-AI/KoBART#egg=kobart
+    from transformers import BartModel
+    from kobart import get_pytorch_kobart_model, get_kobart_tokenizer
+
+    kobart_tokenizer = get_kobart_tokenizer()
+    print(kobart_tokenizer.tokenize("안녕하세요. 한국어 BART 입니다.🤣:)l^o"))
+
+    model = BartModel.from_pretrained(get_pytorch_kobart_model())
+    inputs = kobart_tokenizer(["안녕하세요."], return_tensors="pt")
+    print(model(inputs["input_ids"]))
