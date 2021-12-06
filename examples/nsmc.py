@@ -32,6 +32,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 import pytorch_lightning as pl
 from pytorch_lightning import loggers as pl_loggers
+import torchmetrics
 from transformers.optimization import AdamW, get_cosine_schedule_with_warmup
 from transformers import BartForSequenceClassification
 
@@ -158,7 +159,7 @@ class NSMCDataModule(pl.LightningDataModule):
 class Classification(pl.LightningModule):
     def __init__(self, hparams, **kwargs) -> None:
         super(Classification, self).__init__()
-        self.hparams = hparams
+        self.save_hyperparameters(hparams)
 
     @staticmethod
     def add_model_specific_args(parent_parser):
@@ -207,16 +208,14 @@ class Classification(pl.LightningModule):
         num_workers = (self.hparams.gpus if self.hparams.gpus is not None else 1) * (
             self.hparams.num_nodes if self.hparams.num_nodes is not None else 1
         )
-        data_len = len(self.train_dataloader().dataset)
+        data_len = len(self.train_loader)
         logging.info(f"number of workers {num_workers}, data length {data_len}")
         num_train_steps = int(
             data_len
             / (
                 self.hparams.batch_size
                 * num_workers
-                * self.hparams.accumulate_grad_batches
             )
-            * self.hparams.max_epochs
         )
         logging.info(f"num_train_steps : {num_train_steps}")
         num_warmup_steps = int(num_train_steps * self.hparams.warmup_ratio)
@@ -242,7 +241,12 @@ class KoBARTClassification(Classification):
             get_pytorch_kobart_model()
         )
         self.model.train()
-        self.metric_acc = pl.metrics.classification.Accuracy()
+        self.metric_acc = torchmetrics.classification.Accuracy()
+
+    def load_dataset(self, datamodule):
+        self.datamodule = datamodule
+        self.datamodule.setup(None)
+        self.train_loader = self.datamodule.train_dataloader()
 
     def forward(self, input_ids, attention_mask, labels=None):
         return self.model(
@@ -288,8 +292,6 @@ if __name__ == "__main__":
     if args.default_root_dir is None:
         args.default_root_dir = args.cachedir
 
-    # init model
-    model = KoBARTClassification(args)
 
     if args.subtask == "NSMC":
         # init data
@@ -307,11 +309,16 @@ if __name__ == "__main__":
             save_last=True,
             mode="max",
             save_top_k=-1,
-            prefix=f"{args.subtask}",
+            # prefix=f"{args.subtask}",
         )
     else:
         # add more subtasks
         assert False
+
+    # init model
+    model = KoBARTClassification(args)
+    model.load_dataset(dm)
+
     tb_logger = pl_loggers.TensorBoardLogger(
         os.path.join(args.default_root_dir, "tb_logs")
     )
@@ -320,4 +327,4 @@ if __name__ == "__main__":
     trainer = pl.Trainer.from_argparse_args(
         args, logger=tb_logger, callbacks=[checkpoint_callback, lr_logger]
     )
-    trainer.fit(model, dm)
+    trainer.fit(model, model.train_loader)
